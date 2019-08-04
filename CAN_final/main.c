@@ -13,19 +13,21 @@
 #include "delay.h"
 #include "can.h"
 
-/*** @NOTE: Transceiver used: SN65HVD230 by Texas Instruments 
-				_______________________________________________
-			 |														 									 |		  ________________ 
-			 |		LPC1768					                           |		 | CAN Transceiver|	
-			 |					 		CAN1:	  	           P0.0(RD1)   |<----|CRx					CANH|-----------|
-			 |						                       P0.1(TD1)	 |---->|CTx					CANL|----|-120E-|	
-			 |																							 |		 |________________|		 |		 	|	
-			 |																							 |      ________________		 |	   	|	
-			 |						 	CAN2:			P0.4(RD2) [P2.7 (RD2)] |<----| CRx				CANL|----|-120E-|	
-			 |									  		P0.5(TD2)	[P2.8 (TD2)] |---->| CTx				CANH|-----------|
+/*** 
+		    	  _______________________________________________
+			 |		                                 |	________________ 
+			 |		LPC1768			         |     | CAN Transceiver|	
+			 |		CAN1:	              P0.0(RD1)  |<----|CRx	    CANH|-----------|
+			 |			              P0.1(TD1)  |---->|CTx         CANL|----|-120E-|	
+			 |				                 |     |________________|    |      |	
+			 |					         |      ________________     |      |	
+			 |	        CAN2:     P0.4(RD2) [P2.7 (RD2)] |<----| CRx        CANL|----|-120E-|	
+			 |	                 P0.5(TD2)  [P2.8 (TD2)] |---->| CTx        CANH|-----------|
 			 |_______________________________________________|     | CAN Transceiver| 
-																														 |________________|	
+				                                               |________________|	
 **/
+
+
 
 CAN_MSG_type Tx1_Buff , Rx1_Buff , Tx2_Buff , Rx2_Buff  ;
 uint32_t CAN1_Error_Cnt = 0, CAN2_Error_Cnt = 0;
@@ -63,8 +65,8 @@ int main()
 	}
 	
 	/** 
-			@note: FULLCAN identifier will NOT be received as it's not set in the acceptance filter, make changes to setup_LUT() function for that
-			@FULLCANinit: Initializing LPC_CANAF -> SFF_sa to some value greater than 0 and placing FULLCAN IDs starting at offset 0 from LPC_CANAF_RAM_BASE  (Read User Manual)
+	     @note: FULLCAN identifier will NOT be received as it's not set in the acceptance filter, make changes to setup_LUT() function for that
+	     @FULLCANinit: Initializing LPC_CANAF -> SFF_sa to some value greater than 0 and placing FULLCAN IDs starting at offset 0 from LPC_CANAF_RAM_BASE  (Read User Manual)
 	**/
 	
  	if ( CAN2RxDone == OK )
@@ -74,7 +76,7 @@ int main()
 	  CAN2RxDone = NOT_OK;
 		
 	  /** @note:  The MSG_ID is not checked by software, acceptance filter in hardware handles the IDs to accept.
-								The following condition checks the MSG_ID for functioning in the AF_BYPASS mode and not in the AF_ON mode **/
+		      The following condition checks the MSG_ID for functioning in the AF_BYPASS mode and not in the AF_ON mode **/
 		
 	  if ( (Tx1_Buff.MSG_ID != Rx2_Buff.MSG_ID ) ||
 			( Tx1_Buff.Data_A != Rx2_Buff.Data_A ) ||
