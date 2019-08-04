@@ -16,12 +16,12 @@
 
 #define AF_OFF			0x01
 #define AF_BYPASS		0x02
-#define AF_ON				0x00
-#define AF_FULLCAN	0x04
+#define AF_ON			0x00
+#define AF_FULLCAN		0x04
 
 /* Identifiers for EXP STD, GRP STD */
-#define EXP_STD_ID				0x100
-#define GRP_STD_ID				0x100
+#define EXP_STD_ID		0x100
+#define GRP_STD_ID		0x100
 
 #define OK 1 
 #define NOT_OK 0 
@@ -30,11 +30,11 @@ typedef struct {
 	
 	
 	uint32_t FRAME ;  				// Bits 19-16: DLC - Data Length Count
-													 // Bit 30: Set for a RTR message
-													// Bit 31: Set for a 29-bit, Extended ID message
-	uint32_t MSG_ID ;    	 // CAN Message ID (11-bit or 29-bit)
-	uint32_t Data_A ; 		// CAN Message Data Bytes 0-3
-	uint32_t Data_B ;  	 // CAN Message Data Bytes 4-7
+						       // Bit 30: Set for a RTR message
+						      // Bit 31: Set for a 29-bit, Extended ID message
+	uint32_t MSG_ID ;    		  // CAN Message ID (11-bit or 29-bit)
+	uint32_t Data_A ; 		 // CAN Message Data Bytes 0-3
+	uint32_t Data_B ;  	 	// CAN Message Data Bytes 4-7
 
 } CAN_MSG_type;
 
