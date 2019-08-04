@@ -19,8 +19,8 @@ static uint32_t CAN1_Rx_cnt = 0 , CAN2_Rx_cnt = 0 ;
 
 
 /** 
-	@Brief 			 : Initialize CAN Modules, Powers ON both Modules, Configures Pins, Sets up Bitrate, Enables CAN Interupt
-	@retval			 : None 
+	@Brief 	     : Initialize CAN Modules, Powers ON both Modules, Configures Pins, Sets up Bitrate, Enables CAN Interupt
+	@retval	     : None 
 	@Argumemnts  : None 
 **/ 
 
@@ -31,19 +31,19 @@ void init_CAN(void)
 	// Config PCLK , CAN 1 & 2 and ACF Filter to same value, default is PCLKSEL 0x00000000 ; 
 	
 	LPC_PINCON->PINSEL0 &= ~0x00000FFF;  			 	 	/* CAN1 is p0.0 and p0.1	*/
-  LPC_PINCON->PINSEL0 |= 0x00000005;	
+  	LPC_PINCON->PINSEL0 |= 0x00000005;	
 	LPC_PINCON->PINSEL0 |= (1<<11) | (1<<9) ; 	 /* CAN2 is p0.4 and p0.5 */ 	
 	
-	 //LPC_PINCON->PINSEL4 &= ~0x0003C000;  			/* Uncomment for using P2.7 as RD2  and P2.8 as RD1 */
-  //LPC_PINCON->PINSEL4 |= 0x00014000;				 
+	//LPC_PINCON->PINSEL4 &= ~0x0003C000;  			/* Uncomment for using P2.7 as RD2  and P2.8 as RD1 */
+  	//LPC_PINCON->PINSEL4 |= 0x00014000;				 
 	
 	LPC_CAN1 -> MOD = LPC_CAN2 -> MOD = 1 ; 
 	LPC_CAN1 -> IER = LPC_CAN2 -> IER = 0 ; 
 	LPC_CAN1 -> GSR = LPC_CAN2 -> GSR = 0 ; 
 	
 	/** @TIMING : BRP+1 = Fpclk/(CANBitRate * QUANTAValue)   
-								QUANTAValue = 1 + (Tseg1+1) + (Tseg2+1) 
-								BitRate = Fcclk/(APBDIV * (BRP+1) * ((Tseg1+1)+(Tseg2+1)+1)) **/ 
+		      QUANTAValue = 1 + (Tseg1+1) + (Tseg2+1) 
+		BitRate = Fcclk/(APBDIV * (BRP+1) * ((Tseg1+1)+(Tseg2+1)+1)) **/ 
 	
 	LPC_CAN1 -> BTR = LPC_CAN2 -> BTR = 0x7F0009 ;   			/* 100kbps */  
 	LPC_CAN1 -> MOD = LPC_CAN2 -> MOD = 0 ; 
@@ -54,9 +54,9 @@ void init_CAN(void)
 }
 
 /** 
-	@Brief 			 : Data Transmission from CAN1 module  
-	@retval			 : Status of Transmission ( OK / NOT_OK )  
-	@Argumemnts  : Ptr to data of CAN_MSG_Type structure 
+	@Brief 	    : Data Transmission from CAN1 module  
+	@retval	    : Status of Transmission ( OK / NOT_OK )  
+	@Argumemnts : Ptr to data of CAN_MSG_Type structure 
 **/ 
 
 uint8_t CAN1_Tx (CAN_MSG_type* tx_data ) 
@@ -95,9 +95,9 @@ uint8_t CAN1_Tx (CAN_MSG_type* tx_data )
 }
 
 /** 
-	@Brief 			 : Data Transmission from CAN2 module  
-	@retval			 : Status of Transmission ( OK / NOT_OK )  
-	@Argumemnts  : Ptr to data of CAN_MSG_Type structure 
+	@Brief 	    : Data Transmission from CAN2 module  
+	@retval	    : Status of Transmission ( OK / NOT_OK )  
+	@Argumemnts : Ptr to data of CAN_MSG_Type structure 
 **/ 
 
 uint8_t CAN2_Tx (CAN_MSG_type* tx_data) 
@@ -136,8 +136,8 @@ uint8_t CAN2_Tx (CAN_MSG_type* tx_data)
 }
 
 /** 
-	@Brief 			 : Individual ISR Functions for data reception from both Modules 
-	@retval			 : None 
+	@Brief 	     : Individual ISR Functions for data reception from both Modules 
+	@retval	     : None 
 	@Argumemnts  : None 
 **/ 
 
@@ -164,7 +164,7 @@ void do_CAN2_rx(void)
 	
 	Rx_Buff -> FRAME = LPC_CAN2 -> RFS  ;    /* Frame  */
 	Rx_Buff -> MSG_ID = LPC_CAN2 -> RID ; 	/*   ID	  */
-	Rx_Buff -> Data_A = LPC_CAN2 -> RDA ;	 /* Data A */
+	Rx_Buff -> Data_A = LPC_CAN2 -> RDA ;  /* Data A */
 	Rx_Buff -> Data_B = LPC_CAN2 -> RDB ; /* Data B	*/
  
 	CAN2RxDone = OK ;
@@ -174,8 +174,8 @@ void do_CAN2_rx(void)
 
 
 /** 
-	@Brief 			 : CAN Interrupt Service Routine
-	@retval			 : None 
+	@Brief : CAN Interrupt Service Routine
+	@retval : None 
 	@Argumemnts  : None 
 **/ 
 
@@ -210,8 +210,8 @@ void CAN_IRQHandler (void)
 
 
 /** 
-	@Brief 			 : Sets up Look-up table for Acceptance Filter
-	@retval			 : None 
+	@Brief 	     : Sets up Look-up table for Acceptance Filter
+	@retval	     : None 
 	@Argumemnts  : None 
 **/ 
 
@@ -224,14 +224,14 @@ void setup_LUT(void)
 	/* Explicit Standard IDs */
   LPC_CANAF->SFF_sa = address;
 	
-	CAN1_ID = (i << 29) | (EXP_STD_ID << 16);								/** Set up the ID for CAN1 **/ 
-	CAN2_ID = ((i+1) << 13) | (EXP_STD_ID << 0);					 /** Set up the ID for CAN2 **/ 
-	LPC_CANAF_RAM -> mask[0] = CAN1_ID | CAN2_ID  ; 			// *((volatile uint32_t *)(LPC_CANAF_RAM_BASE + address)) = CAN1_ID | CAN2_ID;
+	CAN1_ID = (i << 29) | (EXP_STD_ID << 16);			/** Set up the ID for CAN1 **/ 
+	CAN2_ID = ((i+1) << 13) | (EXP_STD_ID << 0);	       	       /** Set up the ID for CAN2 **/ 
+	LPC_CANAF_RAM -> mask[0] = CAN1_ID | CAN2_ID  ; // *((volatile uint32_t *)(LPC_CANAF_RAM_BASE + address)) = CAN1_ID | CAN2_ID;
 	address += 4; 
 	
 	
-	CAN1_ID = (i << 29) | (0x123 << 16);							/** Set up the ID for CAN1 **/ 
-	CAN2_ID = ((i+1) << 13) | (0x125 << 0);					 /** Set up the ID for CAN2 **/ 
+	CAN1_ID = (i << 29) | (0x123 << 16);		 		/** Set up the ID for CAN1 **/ 
+	CAN2_ID = ((i+1) << 13) | (0x125 << 0);		               /** Set up the ID for CAN2 **/ 
 	LPC_CANAF_RAM -> mask[1] = CAN1_ID | CAN2_ID  ; 	
 	address += 4; 
 	
@@ -239,9 +239,9 @@ void setup_LUT(void)
   /* Group standard IDs */
   LPC_CANAF->SFF_GRP_sa = address;
 
-	CAN1_ID = (i << 29) | (GRP_STD_ID << 16);						   /** Set up the ID for CAN1 **/ 
-	CAN2_ID = ((i+1) << 13) | (GRP_STD_ID << 0);					/** Set up the ID for CAN2 **/ 
-	LPC_CANAF_RAM -> mask[2] = CAN1_ID | CAN2_ID;			 	 //*((volatile uint32_t *)(LPC_CANAF_RAM_BASE + address)) = CAN1_ID | CAN2_ID;
+	CAN1_ID = (i << 29) | (GRP_STD_ID << 16);		   /** Set up the ID for CAN1 **/ 
+	CAN2_ID = ((i+1) << 13) | (GRP_STD_ID << 0);	          /** Set up the ID for CAN2 **/ 
+	LPC_CANAF_RAM -> mask[2] = CAN1_ID | CAN2_ID;		//*((volatile uint32_t *)(LPC_CANAF_RAM_BASE + address)) = CAN1_ID | CAN2_ID;
 
  
  /** @NOTE : Set up extended IDs as per the following example : 
@@ -258,8 +258,8 @@ void setup_LUT(void)
 }	
 
 /** 
-	@Brief 			 : Configures Acceptance Filter Mode 
-	@retval			 : None 
+	@Brief 	     : Configures Acceptance Filter Mode 
+	@retval      : None 
 	@Argumemnts  : Acceptance Filter Mode 
 	@Note  			 : Passing AF_OFF Resets CAN Module by setting RM Bit in LPC_CANx -> MOD register 
 **/ 
@@ -269,27 +269,27 @@ void CONFIG_CAN_FILTER_MODE (uint8_t mode)
 	switch(mode)
 	{
 		case AF_OFF : 
-										LPC_CANAF -> AFMR = mode ; 
-										LPC_CAN1 -> MOD = LPC_CAN2 -> MOD = 1 ; 
-										LPC_CAN1 -> IER = LPC_CAN2 -> IER = 0 ; 
-										LPC_CAN1 -> GSR = LPC_CAN2 -> GSR = 0 ; 
-										
-										break ; 
+				LPC_CANAF -> AFMR = mode ; 
+				LPC_CAN1 -> MOD = LPC_CAN2 -> MOD = 1 ; 
+				LPC_CAN1 -> IER = LPC_CAN2 -> IER = 0 ; 
+				LPC_CAN1 -> GSR = LPC_CAN2 -> GSR = 0 ; 
+					
+				break ; 
 		
 		case AF_BYPASS : 
-										
-										LPC_CANAF -> AFMR = mode ;
-										break ; 
+									
+				LPC_CANAF -> AFMR = mode ;
+				break ; 
 	
 		case AF_ON : 
 		case AF_FULLCAN : 
 							
-										LPC_CANAF -> AFMR = AF_OFF ; 
-										setup_LUT() ; 
-										LPC_CANAF -> AFMR = mode ;
-										break ; 
+				LPC_CANAF -> AFMR = AF_OFF ; 
+				setup_LUT() ; 
+				LPC_CANAF -> AFMR = mode ;
+				break ; 
 		
-		default : 			break ; 
+		default : 	break ; 
 	}
 
 }	
